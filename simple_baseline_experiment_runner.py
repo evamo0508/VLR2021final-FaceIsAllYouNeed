@@ -10,9 +10,8 @@ class SimpleBaselineExperimentRunner(ExperimentRunnerBase):
     """
     Sets up the Simple Baseline model for training. This class is specifically responsible for creating the model and optimizing it.
     """
-    def __init__(self, train_image_dir, train_annotation_path,
-                 test_image_dir, test_annotation_path, batch_size, num_epochs,
-                 num_data_loader_workers, cache_location, lr, log_validation):
+    def __init__(self, batch_size, num_epochs, model_path,
+                 num_data_loader_workers, lr, log_validation):
 
         ############ 2.3 TODO: set up transform
         transform = transforms.Compose([
@@ -39,14 +38,14 @@ class SimpleBaselineExperimentRunner(ExperimentRunnerBase):
 
         model = SimpleBaselineNet()
 
-        super().__init__(train_dataset, val_dataset, model, batch_size, num_epochs, num_data_loader_workers, log_validation)
+        super().__init__(train_dataset, val_dataset, model, batch_size, num_epochs, model_path, num_data_loader_workers, log_validation)
 
         ############ 2.5 TODO: set up optimizer
         # no need to train GoogLeNet parameters
         self.optimizer = torch.optim.SGD(
             self._model.parameters(),
             lr = lr,
-            #momentum=0.9,
+            momentum=0.9,
             #weight_decay=1e-5,
         )
         ############

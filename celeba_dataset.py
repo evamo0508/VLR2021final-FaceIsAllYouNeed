@@ -65,6 +65,11 @@ class CelebADataset(Dataset):
                 self.val_anno.append(anno)
                 self.val_img_cnt += 1
 
+        # calculate mean & std of heights in training data
+        heights = np.array([h for _, _, h in self.train_anno])
+        self._height_mean = np.mean(heights)
+        self._height_std = np.std(heights)
+
 
     def __len__(self):
         if self.train_val_flag == "train":
@@ -90,14 +95,14 @@ class CelebADataset(Dataset):
         file_name = anno[idx][0]
         name   = anno[idx][1]
         height = anno[idx][2]
+        height = (height - self._height_mean) / self._height_std
+        #height = 0.01 * height
+        height = torch.FloatTensor([height])
         aod    = 0
 
         img_path = self._image_dir + '/' + file_name
         # Open the image, convert to RGB
         image = self._transform(Image.open(img_path).convert("RGB"))
-        height = torch.FloatTensor([height])
-
-
 
         return {'image': image, 'name': name, 'height': height, 'age_of_death': aod}
 

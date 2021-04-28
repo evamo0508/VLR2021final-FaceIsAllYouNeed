@@ -1,2 +1,6 @@
 ## training simplebaseline
-python3 main.py --log_validation --num_epochs 10
+python3 main.py --model_path <change-this-dumbass> --log_validation --num_epochs 10
+
+## constants
+mean height: 172.24
+std height: 10.03
