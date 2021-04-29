@@ -4,7 +4,8 @@ from PIL import Image
 import requests
 import re
 
-
+import os 
+import matplotlib.pyplot as plt
 
 
 def process_csv(height_csv_path, save_name_path, save_height_path):
@@ -24,20 +25,18 @@ def process_csv(height_csv_path, save_name_path, save_height_path):
                 name = row['Title_URL'].strip()
                 name_key = row['Title_URL'].replace(" ", "").lower()
 
-                # Skip if redundant occurance
+                # Skip if redundant occurance 
                 if name_key in name_height_map.keys():
                     continue
 
                 # Get height
                 height_str = re.search(r'\((.*?)\)',row['Title']).group(1).split(' ')[0]
                 height = float(re.search(r'\((.*?)\)',row['Title']).group(1).split(' ')[0])
-
+                
                 # Add to map
                 name_height_map[name_key] = [height, name]
 
-
-
-                # # Save Image
+                # # Saving images from celebrityheights.com
                 # image_id = ind
                 # image_id_str = str(image_id)
                 # # adhere to the image path format (the image number is 6 digits long)
@@ -46,12 +45,10 @@ def process_csv(height_csv_path, save_name_path, save_height_path):
                 # img_url = row['Image']
                 # if img_url != '':
                 #     im = Image.open(requests.get(img_url, stream=True).raw)
-                #     # Save img to
+                #     # Save img to 
                 #     im = im.save("data/celeb_height_web/_" + image_id_str + ".jpg")
 
-
-
-
+  
                 # \n is placed to indicate EOL (End of Line)
                 file_nm.write(name + "\n")
                 file_ht.write(height_str + "\n")
@@ -66,7 +63,7 @@ def parse_names(name_height_map, read_path):
     Lines = file1.readlines()
 
     cnt = 0
-
+ 
     for line in Lines:
         name = line.split()[1].lower().replace("_", "")
         if name in name_height_map.keys():
@@ -79,15 +76,85 @@ def parse_names(name_height_map, read_path):
     print("CelebA Size: ", len(Lines))
     print("Match Rate: ", float(cnt / len(Lines)))
 
+def process_vip_data(vip_img_dir, vip_csv_dir, img_save_dir, csv_save_dir, part_list_dir):
+    
+    # Starting index
+    ind = 202600
 
+    # open files in append mode
+    file_final = open(csv_save_dir,'a')
+    file_part = open(part_list_dir,'a')
 
+    # img number to height map
+    img_height_map = {}
+    with open(vip_csv_dir, newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            img_path = row['image']
+            height = str(float(row['height']) * 100)
+            # Add to map
+            img_height_map[img_path] = height
+
+    # Separate male and female files
+    f_list = []
+    m_list = []
+    entries = os.listdir(vip_img_dir)
+    for entry in entries:
+        # print(entry)
+        if entry[0] == "f":
+            f_list.append(entry)
+        else:
+            m_list.append(entry)
+
+    # Devide into train data and val data, and save to files
+    m_train_len = int(len(m_list) * (4 / 5))
+    for i, item in enumerate(m_list):
+        img_file_name = str(ind) + ".jpg"
+        # Save img to img_align
+        im = Image.open(vip_img_dir + item)
+        im = im.save(img_save_dir + img_file_name)
+        # Save new info to final_data.txt
+        l = img_file_name + " " + "dumbass" + " " + "Dumb Ass" + " " + str(img_height_map[item[0:-4]]) +"\n"
+        file_final.write(l)
+
+        # Save to partition txt
+        if i < m_train_len:
+            l = img_file_name + " " + "0\n"
+            file_part.write(l)
+        else:
+            l = img_file_name + " " + "1\n"
+            file_part.write(l)
+        ind += 1
+
+    f_train_len = int(len(f_list) * (4 / 5))
+    for i, item in enumerate(f_list):
+        img_file_name = str(ind) + ".jpg"
+        # Save img to img_align
+        im = Image.open(vip_img_dir + item)
+        im = im.save(img_save_dir + img_file_name)
+
+        # Save new info to final_data.txt
+        l = img_file_name + " " + "dumbass" + " " + "Dumb_Ass" + " " + str(img_height_map[item[0:-4]]) + "\n"
+        file_final.write(l)
+
+        # Save to partition txt
+        if i < f_train_len:
+            l = img_file_name + " " + "0\n"
+            file_part.write(l)
+        else:
+            l = img_file_name + " " + "1\n"
+            file_part.write(l)
+        ind += 1
+        
 def main():
-
+    
     # with open('data/all_celeb_height.csv') as f:
     #     reader = csv.DictReader(f)
     #     print(reader.fieldnames)
+
     name_height_map = process_csv("data/all_celeb_height.csv", "data/celeb_height_com_name.txt", "data/celeb_height_com_height.txt")
     parse_names(name_height_map, "data/list_identity_celeba.txt")
+    # process_vip_data("data/vip/data/", "data/vip/annotation.csv", "data/img_align_celeba_extend/", "data/final_data.txt", "data/list_eval_partition.txt")
 
 
 if __name__ == "__main__":

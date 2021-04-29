@@ -87,7 +87,6 @@ class CelebADataset(Dataset):
         elif self.train_val_flag == "val":
             anno = self.val_anno
 
-
         file_name = anno[idx][0]
         name   = anno[idx][1]
         height = anno[idx][2]
