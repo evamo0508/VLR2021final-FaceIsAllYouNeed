@@ -4,6 +4,10 @@ __pycache__/
 *$py.class
 
 data/
+*.ipynb
+.ipynb_checkpoints/
+*.pt
+*.pth
 
 # C extensions
 *.so
