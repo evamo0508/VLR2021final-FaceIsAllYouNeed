@@ -23,7 +23,7 @@ class ExperimentRunnerBase(object):
         self._test_freq = 250  # Steps
         self._save_model_freq = 1000 # Steps
 
-        self._train_dataset_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_data_loader_workers)
+        self._train_dataset_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_data_loader_workers, drop_last=True) # drop last during train to prevent batchnorm break
 
         # If you want to, you can shuffle the validation dataset and only use a subset of it to speed up debugging
         self._val_dataset_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=True, num_workers=num_data_loader_workers)
@@ -59,17 +59,18 @@ class ExperimentRunnerBase(object):
                 batch_height = batch_data["height"].squeeze().cuda()
 
                 predicted_height = self._model(batch_img) # (N, )
+                original_height = batch_height.detach().cpu() * self._height_std + self._height_mean
 
                 diff = (predicted_height - batch_height).detach().cpu()
                 loss += torch.sum(diff ** 2)
-                err += torch.sum(torch.abs(diff) / batch_height.detach().cpu())
+                err += torch.sum(torch.abs(diff) * self._height_std / original_height)
 
                 # for visualization
                 if batch_id == 0:
                     vis_idx = 0
                     # input img
                     inv_normalize = transforms.Normalize(
-                        mean=[-0.485/0.229, -0.456/0.224, -0.406/0.255],
+                        mean=[-0.485/0.229, -0.456/0.224, -0.406/0.225],
                         std=[1/0.229, 1/0.224, 1/0.225]
                     )
                     log_img = inv_normalize(batch_data["image"][vis_idx])
@@ -123,8 +124,8 @@ class ExperimentRunnerBase(object):
                         self.tb.add_scalar("Training loss", loss.item(), current_step / self._log_freq)
                     ############
 
-                if batch_id == num_batches - 1:
-                #if batch_id == num_batches - 1 or epoch + batch_id == 0:
+                #if batch_id == num_batches - 1:
+                if batch_id == num_batches - 1 or epoch + batch_id == 0:
                     self._model.eval()
                     val_loss, val_acc = self.validate(epoch)
                     print("Epoch: {} has val loss {}, acc {}%".format(epoch, val_loss, val_acc))
