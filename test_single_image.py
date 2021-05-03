@@ -31,12 +31,17 @@ def test(img_dir, model_dir):
     # Predict height
     predicted_height = model(image.unsqueeze(0)).detach().cpu().numpy()
 
-    if predicted_height <= 1.6:
-        print("Predicted height: ", predicted_height, "meters\n", "Damn you short as hell, drink some milk!")
-    elif predicted_height > 1.6 and predicted_height <= 1.8:
-        print("Predicted height: ", predicted_height, "meters\n", "Alright, not bad, not bad at all")
-    elif predicted_height > 1.8:
-        print("Predicted height: ", predicted_height, "meters\n", "Hows the weather up there?")
+    std = 10.034
+    mean = 172.244
+
+    predicted_height = (predicted_height * std) + mean
+
+    if predicted_height <= 160.0:
+        print("Predicted height: ", predicted_height, "cm\n", "Damn you short as hell, drink some milk!")
+    elif predicted_height > 160.0 and predicted_height <= 180.0:
+        print("Predicted height: ", predicted_height, "cm\n", "Alright, not bad, not bad at all")
+    elif predicted_height > 180.0:
+        print("Predicted height: ", predicted_height, "cm\n", "Hows the weather up there?")
 
     
 

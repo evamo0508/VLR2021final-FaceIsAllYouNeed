@@ -7,6 +7,29 @@ import re
 import os 
 import matplotlib.pyplot as plt
 
+def process_gay_csv(gay_csv_path):
+        read_file_path = gay_csv_path
+        # Name to height map init
+        name_gay_map = {}
+        # Image index
+        ind = 0
+
+        with open(read_file_path, newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                # Get celeb name
+                name = row['\ufeffName'].strip()
+                name_key = row['\ufeffName'].replace(" ", "").lower()
+
+                # Skip if redundant occurance 
+                if name_key in name_gay_map.keys():
+                    continue
+
+                # Add to map
+                name_gay_map[name_key] = "gay"
+                ind += 1
+        return name_gay_map
+
 
 def process_csv(height_csv_path, save_name_path, save_height_path):
         read_file_path = height_csv_path
@@ -56,11 +79,49 @@ def process_csv(height_csv_path, save_name_path, save_height_path):
         # print(name_height_map)
         return name_height_map
 
-def parse_names(name_height_map, read_path):
-    file_out = open("data/final_data.txt","w")
+def parse_gay_names(name_gay_map, read_path, out_file_dir):
 
-    file1 = open(read_path, 'r')
-    Lines = file1.readlines()
+    file_out = open(out_file_dir,"w")
+
+    file_celeba = open(read_path, 'r')
+    Lines = file_celeba.readlines()
+
+    cnt = 0
+    gay_cnt = 0
+    celeb_map = {}
+    gay_map = {}
+ 
+    for line in Lines:
+        name = line.split()[1].lower().replace("_", "")
+        celeb_map[name] = ""
+        if name in name_gay_map.keys():
+            # (file name, dict key, actual name, gay or not)
+            l = line.split()[0] + " " + name + " " + line.split()[1] + " " + "gay" + "\n"
+            file_out.write(l)
+            cnt += 1
+            gay_cnt += 1
+            gay_map[line.split()[1]] = ""
+        else:
+            # (file name, dict key, actual name, gay or not)
+            l = line.split()[0] + " " + name + " " + line.split()[1] + " " + "straight" + "\n"
+            file_out.write(l)
+            cnt += 1
+
+
+    print("Gay images in CelebA: ", gay_cnt)
+    print("CelebA Size: ", len(Lines))
+    print("Number of gays in dataset: ", len(gay_map))
+    print("Number of total celebs: ", len(celeb_map))
+    print("Gay image Rate: ", float(gay_cnt / len(Lines)))
+    print("Gay rate: ", len(gay_map)/len(celeb_map))
+
+    print(gay_map.keys())
+
+def parse_names(name_height_map, read_path, out_file_dir):
+    file_out = open(out_file_dir,"w")
+
+    file_names = open(read_path, 'r')
+    Lines = file_names.readlines()
 
     cnt = 0
  
@@ -148,14 +209,15 @@ def process_vip_data(vip_img_dir, vip_csv_dir, img_save_dir, csv_save_dir, part_
         
 def main():
     
-    # with open('data/all_celeb_height.csv') as f:
+    # with open('data/gaylist.csv') as f:
     #     reader = csv.DictReader(f)
     #     print(reader.fieldnames)
 
-    name_height_map = process_csv("data/all_celeb_height.csv", "data/celeb_height_com_name.txt", "data/celeb_height_com_height.txt")
-    parse_names(name_height_map, "data/list_identity_celeba.txt")
+    # name_height_map = process_csv("data/all_celeb_height.csv", "data/celeb_height_com_name.txt", "data/celeb_height_com_height.txt")
+    # parse_names(name_height_map, "data/list_identity_celeba.txt", "data/final_data.txt")
     # process_vip_data("data/vip/data/", "data/vip/annotation.csv", "data/img_align_celeba_extend/", "data/final_data.txt", "data/list_eval_partition.txt")
-
+    name_gay_map = process_gay_csv("data/gaylist.csv")
+    parse_gay_names(name_gay_map, "data/list_identity_celeba.txt", "data/final_gay_data.txt")
 
 if __name__ == "__main__":
     main()
