@@ -79,8 +79,22 @@ def process_csv(height_csv_path, save_name_path, save_height_path):
         # print(name_height_map)
         return name_height_map
 
-def parse_gay_names(name_gay_map, read_path, out_file_dir):
+def parse_gay_names(name_gay_map, read_path, out_file_dir, data_partition_path):
 
+    # Partition file
+    part_file = open(data_partition_path, 'r')
+    part_Lines = part_file.readlines()
+    part_map = {}
+
+    for part_line in part_Lines:
+        l = part_line.split()
+        part_map[l[0]] = l[1]
+
+    train_cnt = 0
+    train_gay_cnt = 0
+    val_cnt = 0
+    val_gay_cnt = 0
+    ###################################################
     file_out = open(out_file_dir,"w")
 
     file_celeba = open(read_path, 'r')
@@ -94,12 +108,21 @@ def parse_gay_names(name_gay_map, read_path, out_file_dir):
     for line in Lines:
         name = line.split()[1].lower().replace("_", "")
         celeb_map[name] = ""
+        if part_map[line.split()[0]] == '0':
+            train_cnt += 1
+        else:
+            val_cnt += 1
+
         if name in name_gay_map.keys():
             # (file name, dict key, actual name, gay or not)
             l = line.split()[0] + " " + name + " " + line.split()[1] + " " + "gay" + "\n"
             file_out.write(l)
             cnt += 1
             gay_cnt += 1
+            if part_map[line.split()[0]] == '0':
+                train_gay_cnt += 1
+            else:
+                val_gay_cnt += 1
             gay_map[line.split()[1]] = ""
         else:
             # (file name, dict key, actual name, gay or not)
@@ -114,8 +137,10 @@ def parse_gay_names(name_gay_map, read_path, out_file_dir):
     print("Number of total celebs: ", len(celeb_map))
     print("Gay image Rate: ", float(gay_cnt / len(Lines)))
     print("Gay rate: ", len(gay_map)/len(celeb_map))
+    print("taining data gay rate: ", train_gay_cnt / train_cnt)
+    print("validation data gay rate: ", val_gay_cnt / val_cnt)
 
-    print(gay_map.keys())
+    # print(gay_map.keys())
 
 def parse_names(name_height_map, read_path, out_file_dir):
     file_out = open(out_file_dir,"w")
@@ -217,7 +242,7 @@ def main():
     # parse_names(name_height_map, "data/list_identity_celeba.txt", "data/final_data.txt")
     # process_vip_data("data/vip/data/", "data/vip/annotation.csv", "data/img_align_celeba_extend/", "data/final_data.txt", "data/list_eval_partition.txt")
     name_gay_map = process_gay_csv("data/gaylist.csv")
-    parse_gay_names(name_gay_map, "data/list_identity_celeba.txt", "data/final_gay_data.txt")
+    parse_gay_names(name_gay_map, "data/list_identity_celeba.txt", "data/final_gay_data.txt", "data/list_eval_partition.txt")
 
 if __name__ == "__main__":
     main()

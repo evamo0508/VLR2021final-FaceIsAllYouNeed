@@ -55,20 +55,20 @@ class CelebADataset(Dataset):
             file_name   = line_items[0]
             dict_key    = line_items[1]
             actual_name = line_items[2]
-            height      = float(l[3])
-            anno        = [file_name, actual_name, height]
+            orientation = line_items[3]
+            anno        = [file_name, actual_name, orientation]
 
-            if part_map[l[0]] == '0':
+            if part_map[line_items[0]] == '0':
                 self.train_anno.append(anno)
                 self.train_img_cnt += 1
             else:
                 self.val_anno.append(anno)
                 self.val_img_cnt += 1
 
-        # calculate mean & std of heights in training data
-        heights = np.array([h for _, _, h in self.train_anno])
-        self._height_mean = np.mean(heights)
-        self._height_std = np.std(heights)
+        # # calculate mean & std of heights in training data
+        # heights = np.array([h for _, _, h in self.train_anno])
+        # self._height_mean = np.mean(heights)
+        # self._height_std = np.std(heights)
 
 
     def __len__(self):
@@ -92,32 +92,28 @@ class CelebADataset(Dataset):
         elif self.train_val_flag == "val":
             anno = self.val_anno
 
-        file_name = anno[idx][0]
-        name   = anno[idx][1]
-        height = anno[idx][2]
-        height = (height - self._height_mean) / self._height_std
-        #height = 0.01 * height
-        height = torch.FloatTensor([height])
-        aod    = 0
+        file_name   = anno[idx][0]
+        name        = anno[idx][1]
+        orientation = anno[idx][2]
 
         img_path = self._image_dir + '/' + file_name
         # Open the image, convert to RGB
         image = self._transform(Image.open(img_path).convert("RGB"))
 
-        return {'image': image, 'name': name, 'height': height, 'age_of_death': aod}
+        return {'image': image, 'name': name, 'orientation': orientation}
 
 
 def main():
 
     celeb_set = CelebADataset(image_dir="data/img_align_celeba",
-                 annotation_txt_path="data/final_data.txt",
+                 annotation_txt_path="data/final_gay_data.txt",
                  data_partition_path="data/list_eval_partition.txt",
                  train_val_flag="train",
                  transform=None)
     loader = DataLoader(celeb_set, batch_size=50, shuffle=False, num_workers=10)
     # print("celeb_set: ", len(loader))
     for batch_id, batch_data in enumerate(loader):
-        print(batch_data['height'])
+        print(batch_data['orientation'])
 
 if __name__ == "__main__":
     main()
