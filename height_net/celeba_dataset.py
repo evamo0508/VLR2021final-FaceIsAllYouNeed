@@ -46,15 +46,15 @@ class CelebADataset(Dataset):
         part_map = {}
 
         for part_line in part_Lines:
-            l = part_line.split()
-            part_map[l[0]] = l[1]
+            line_items = part_line.split()
+            part_map[line_items[0]] = line_items[1]
 
         for anno_line in anno_Lines:
-            # l = (file name, dict key, actual name, height)
-            l = anno_line.split()
-            file_name   = l[0]
-            dict_key    = l[1]
-            actual_name = l[2]
+            # line_items = (file name, dict key, actual name, height)
+            line_items = anno_line.split()
+            file_name   = line_items[0]
+            dict_key    = line_items[1]
+            actual_name = line_items[2]
             height      = float(l[3])
             anno        = [file_name, actual_name, height]
 
@@ -109,9 +109,9 @@ class CelebADataset(Dataset):
 
 def main():
 
-    celeb_set = CelebADataset(image_dir="data/img_align_celeba",
-                 annotation_txt_path="data/final_data.txt",
-                 data_partition_path="data/list_eval_partition.txt",
+    celeb_set = CelebADataset(image_dir="../data/img_align_celeba",
+                 annotation_txt_path="../data/final_data.txt",
+                 data_partition_path="../data/list_eval_partition.txt",
                  train_val_flag="train",
                  transform=None)
     loader = DataLoader(celeb_set, batch_size=50, shuffle=False, num_workers=10)

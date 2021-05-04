@@ -51,10 +51,12 @@ class SimpleBaselineExperimentRunner(ExperimentRunnerBase):
         ############
 
 
-    def _optimize(self, predicted_height, ground_truth_height):
+    def _optimize(self, predicted_orientation, ground_truth_orientation, weight=19):
         ############ 2.7 TODO: compute the loss, run back propagation, take optimization step.
-        criterion = nn.MSELoss(reduction='mean').cuda()
-        loss = criterion(predicted_height, ground_truth_height)
+        # Binary classification, weighted loss, gay : straight = 9 : 1
+        criterion = nn.BCEWithLogitsLoss(pos_weight=torch.Tensor([weight])).cuda
+
+        loss = criterion(predicted_orientation, ground_truth_orientation)
 
         self.optimizer.zero_grad()
         loss.backward()
