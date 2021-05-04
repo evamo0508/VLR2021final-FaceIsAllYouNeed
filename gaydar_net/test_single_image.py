@@ -1,6 +1,6 @@
 from SimpleBaselineNet import SimpleBaselineNet
 from experiment_runner_base import ExperimentRunnerBase
-from celeba_dataset import CelebADataset
+from gay_dataset import GayDataset
 import argparse
 from torchvision import transforms
 from PIL import Image

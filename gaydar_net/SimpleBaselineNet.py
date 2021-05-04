@@ -27,7 +27,7 @@ class SimpleBaselineNet(nn.Module):
             nn.ReLU(),
             nn.Dropout(0.4),
             # fc3
-            nn.Linear(10, 2),
+            nn.Linear(10, 1),
         )
 
     def forward(self, x):

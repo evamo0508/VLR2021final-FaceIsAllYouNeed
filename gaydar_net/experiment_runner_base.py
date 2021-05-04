@@ -1,6 +1,6 @@
 import os
 import numpy as np
-
+import torch.nn as nn
 import torch
 import torchvision
 import torch.nn.functional as F
@@ -49,14 +49,14 @@ class ExperimentRunnerBase(object):
         # Should return your validation accuracy
         # loss, err = 0.0, 0.0
 
-        correct_cnt = 0, 0
+        correct_cnt = 0
 
         with torch.no_grad():
             num_batches = len(self._val_dataset_loader)
 
             for batch_id, batch_data in enumerate(self._val_dataset_loader):
                 batch_img = batch_data["image"].cuda()
-                batch_orientation = batch_data["orientation"].squeeze().cuda()
+                ground_truth_orientation = batch_data["orientation"].squeeze().cuda()
 
                 
                 predicted_orientation = self._model(batch_img)
@@ -65,14 +65,28 @@ class ExperimentRunnerBase(object):
                 # diff = (predicted_orientation - batch_orientation).detach().cpu()
                 # loss += torch.sum(diff ** 2)
                 # err += torch.sum(torch.abs(diff) / batch_orientation.detach().cpu())
-                criterion = nn.BCEWithLogitsLoss(pos_weight=torch.Tensor([19])).cuda
-                loss = criterion(predicted_orientation, ground_truth_orientation)
-                loss = self._optimize(predicted_orientation, ground_truth_orientation, weight=19)
+                # criterion = nn.BCEWithLogitsLoss(pos_weight=torch.Tensor([19])).cuda
+                # loss = criterion(predicted_orientation, ground_truth_orientation)
+                # loss = self._optimize(predicted_orientation, ground_truth_orientation, weight=19)
 
-                predicted_orientation = torch.where(torch.sigmoid(predicted_orientation) > 0.5)  # (N, )
-                correct_cnt += np.sum(batch_orientation == predicted_orientation)
+                # predicted_orientation = torch.where(torch.sigmoid(predicted_orientation) > 0.5)  # (N, )
+                # print("pred right out of model: ", predicted_orientation)
+                # print("pred through sigmoid: ", torch.sigmoid(predicted_orientation))
+                # print("pred > 0.5: ", torch.sigmoid(predicted_orientation) > 0.5)
+                # print("gt: ", ground_truth_orientation)
+                # gt = []
+                # for item in ground_truth_orientation:
+                #     gt.append(int(item))
+                # print("test: ", (torch.BoolTensor(ground_truth_orientation).cuda() == (torch.sigmoid(predicted_orientation) > 0.5)))
+                # cnt = 0
+                # for i in range(len(gt)):
+                #     if torch.BoolTensor(gt).cuda()[i] == (torch.sigmoid(predicted_orientation) > 0.5)[i]:
+                #         cnt += 1
+                correct_cnt += sum(torch.BoolTensor(ground_truth_orientation).cuda() == (torch.sigmoid(predicted_orientation) > 0.5))
+                # print("cnt: ", cnt)
+                # correct_cnt += cnt
+                # print("correct cnt: ", correct_cnt)
                 
-
                 # for visualization
                 if batch_id == 0:
                     vis_idx = 0
@@ -85,7 +99,7 @@ class ExperimentRunnerBase(object):
                     # predicted height (denormalized)
                     log_pred = predicted_orientation[vis_idx]
                     # GT height
-                    log_gt = batch_orientation[vis_idx]
+                    log_gt = ground_truth_orientation[vis_idx]
 
         # MSE = loss / (num_batches * self._batch_size)
         ACC = correct_cnt / (num_batches * self._batch_size)
@@ -98,7 +112,7 @@ class ExperimentRunnerBase(object):
             self.tb.add_scalar("Prediction", log_pred, iteration)
             self.tb.add_scalar("Ground Truth", log_gt, iteration)
             ############
-        return MSE, ACC
+        return ACC
 
     def train(self):
 

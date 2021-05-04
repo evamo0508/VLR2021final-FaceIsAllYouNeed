@@ -15,7 +15,7 @@ import csv
 sys.path.append(os.getcwd())
 
 
-class CelebADataset(Dataset):
+class GayDataset(Dataset):
     """
     Load the VQA dataset using the VQA python API. We provide the necessary subset in the External folder, but you may
     want to reference the full repo (https://github.com/GT-Vision-Lab/VQA) for usage examples.
@@ -112,7 +112,7 @@ class CelebADataset(Dataset):
 
 def main():
 
-    celeb_set = CelebADataset(image_dir="../data/img_align_celeba",
+    celeb_set = GayDataset(image_dir="../data/img_align_celeba",
                  annotation_txt_path="../data/final_gay_data.txt",
                  data_partition_path="../data/list_eval_partition.txt",
                  train_val_flag="train",

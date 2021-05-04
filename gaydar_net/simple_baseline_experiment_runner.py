@@ -1,6 +1,6 @@
 from SimpleBaselineNet import SimpleBaselineNet
 from experiment_runner_base import ExperimentRunnerBase
-from celeba_dataset import CelebADataset
+from gay_dataset import GayDataset
 
 import torch
 import torch.nn as nn
@@ -22,16 +22,16 @@ class SimpleBaselineExperimentRunner(ExperimentRunnerBase):
         ])
         ############
 
-        train_dataset = CelebADataset(image_dir="data/img_align_celeba",
-            annotation_txt_path="data/final_data.txt",
-            data_partition_path="data/list_eval_partition.txt",
+        train_dataset = GayDataset(image_dir="../data/img_align_celeba",
+            annotation_txt_path="../data/final_gay_data.txt",
+            data_partition_path="../data/list_eval_partition.txt",
             train_val_flag="train",
             transform=transform,
         )
 
-        val_dataset = CelebADataset(image_dir="data/img_align_celeba",
-            annotation_txt_path="data/final_data.txt",
-            data_partition_path="data/list_eval_partition.txt",
+        val_dataset = GayDataset(image_dir="../data/img_align_celeba",
+            annotation_txt_path="../data/final_gay_data.txt",
+            data_partition_path="../data/list_eval_partition.txt",
             train_val_flag="val",
             transform=transform,
         )
@@ -54,7 +54,8 @@ class SimpleBaselineExperimentRunner(ExperimentRunnerBase):
     def _optimize(self, predicted_orientation, ground_truth_orientation, weight=19):
         ############ 2.7 TODO: compute the loss, run back propagation, take optimization step.
         # Binary classification, weighted loss, gay : straight = 9 : 1
-        criterion = nn.BCEWithLogitsLoss(pos_weight=torch.Tensor([weight])).cuda
+        ground_truth_orientation = ground_truth_orientation.type(torch.FloatTensor).cuda()
+        criterion = nn.BCEWithLogitsLoss(pos_weight=torch.Tensor([weight])).cuda()
 
         loss = criterion(predicted_orientation, ground_truth_orientation)
 
