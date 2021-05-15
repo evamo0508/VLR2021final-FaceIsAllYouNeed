@@ -95,7 +95,7 @@ In order to make the model learn better from the labels, we preprocessed the hei
 For image preprocessing, we applied augmentation on the training set, including random grayscale and random horizontal flip. We also tried random cropping which worsened our performance, probably due to the images aligned about the eyes.
 
 * **Network architecture**
-Input images are resized to $3\times224\times224$ in our implementation. 
+Input images are resized to 3x224x224 in our implementation. 
 For our neural network classifier, we use a sequence of linear layers with 128, 10, and 1 neurons respectively, each followed by a batch normalization layer, a ReLU activation, and a dropout layer with probability 0.4, except for the final layer.
 
 * **Training**
@@ -111,6 +111,7 @@ On the other hand, the FaceNet, which is trained on facial images, produces sali
 <center>
 
 ![](https://i.imgur.com/aAopqwV.png)
+
 *Figure: Comparison between original images (left), \
 saliency maps from VGG (center) and FaceNet (right).*
 </center>
