@@ -48,10 +48,10 @@ The "Show me your face and I will tell you your height, weight, and body mass in
 
 <center>
 
-![parse method](/docs/parse.png)
+![parse method](docs/parse.png)
 *Figure: Our data collection and matching method.*
 
-![aligned image](/docs/aligned_img.png)
+![aligned image](docs/aligned_img.png)
 *Figure: Our generated dataset.*
 </center>
 
@@ -116,7 +116,7 @@ The following table shows the training loss and validation accuracy after traini
 
 
 | Upstream Network | Training Loss | Validation Accuracy |
-|-------|---------------|---------------------|
+|:-------|:---------------|:---------------------|
 | VGG16 | 0.56 | 96.5% |
 | VGGFace2 | 0.50| 96.7% |
 
