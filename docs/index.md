@@ -48,10 +48,10 @@ The "Show me your face and I will tell you your height, weight, and body mass in
 
 <center>
 
-![parse method](image/pasre.png =500x)
+![parse method](../images/parse.png)
 *Figure: Our data collection and matching method.*
 
-![](https://i.imgur.com/jjdTTCC.png =500x)
+![aligned image](../images/aligned_img.png)
 *Figure: Our generated dataset.*
 </center>
 
