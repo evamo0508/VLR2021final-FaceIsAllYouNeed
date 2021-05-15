@@ -38,6 +38,7 @@ In order to find the height labels for the people in the image dataset, we could
 <center>
 
 ![Alt Text](https://media.giphy.com/media/iQLOjvhkahU9lZgHZD/giphy.gif)
+
 *Figure: Facial Images in the CelebA Dataset Aligned Roughly About the Eyes*
 
 </center>
@@ -49,9 +50,11 @@ The "Show me your face and I will tell you your height, weight, and body mass in
 <center>
 
 ![](https://i.imgur.com/W9dfnds.png =500x)
+
 *Figure: Our data collection and matching method.*
 
 ![](https://i.imgur.com/jjdTTCC.png =500x)
+
 *Figure: Our generated dataset.*
 </center>
 
