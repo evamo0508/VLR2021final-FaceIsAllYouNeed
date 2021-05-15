@@ -48,7 +48,7 @@ The "Show me your face and I will tell you your height, weight, and body mass in
 
 <center>
 
-![parse method](image/pasre.png =500x)
+![parse method](images/pasre.png =500x)
 *Figure: Our data collection and matching method.*
 
 ![](https://i.imgur.com/jjdTTCC.png =500x)
