@@ -48,13 +48,10 @@ The next step was to find the height labels of these faces. The website celebhei
 The "Show me your face and I will tell you your height, weight, and body mass index" [2] research also had a celebrity face and labeled height dataset of size 1026, and we were able to contact the author to acquire it. Although the dataset isn't large compared to what we already have, we still added these image - height pairs to our data.
 
 <center>
-
-![](https://i.imgur.com/W9dfnds.png =500x)
-
+![parse method](../images/parse.png)
 *Figure: Our data collection and matching method.*
 
-![](https://i.imgur.com/jjdTTCC.png =500x)
-
+![aligned image](../images/aligned_img.png)
 *Figure: Our generated dataset.*
 </center>
 
