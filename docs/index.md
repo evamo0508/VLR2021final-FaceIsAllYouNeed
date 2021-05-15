@@ -81,7 +81,7 @@ VGGFace2 is also utilized in related applications, such as face recognition [6] 
 
 <center>
 
-![Imgur Image](https://i.imgur.com/FsBB2mZ.png)
+![Imgur Image](https://i.imgur.com/FsBB2mZ.PNG)
 *Figure: Example of FaceNet Face Recognition.*
 </center>
 
