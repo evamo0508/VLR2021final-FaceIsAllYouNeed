@@ -65,7 +65,7 @@ During both training and testing phases, we pass the aligned, augmented face ima
 After having the height prediction of an instance, we compare it to the ground truth height, and use the mean square error (MSE) as our loss function:
 <center>
 
-![](https://imgur.com/9e8npf1)
+![](https://imgur.com/9e8npf1.png)
 
 
 ![](https://i.imgur.com/5J4CvCx.png)
