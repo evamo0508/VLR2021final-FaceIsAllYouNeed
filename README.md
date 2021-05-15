@@ -38,6 +38,7 @@ In order to find the height labels for the people in the image dataset, we could
 <center>
 
 ![Alt Text](https://media.giphy.com/media/iQLOjvhkahU9lZgHZD/giphy.gif)
+
 *Figure: Facial Images in the CelebA Dataset Aligned Roughly About the Eyes*
 
 </center>
@@ -48,10 +49,12 @@ The "Show me your face and I will tell you your height, weight, and body mass in
 
 <center>
 
-![](https://i.imgur.com/W9dfnds.png =500x)
+![](https://i.imgur.com/W9dfnds.png)
+
 *Figure: Our data collection and matching method.*
 
-![](https://i.imgur.com/jjdTTCC.png =500x)
+![](https://i.imgur.com/jjdTTCC.png)
+
 *Figure: Our generated dataset.*
 </center>
 
@@ -65,6 +68,7 @@ After having the height prediction of an instance, we compare it to the ground t
 $loss = \frac{1}{N}\sum_{n=1}^N(y_n - \hat{y}_n)^2$
 
 ![](https://i.imgur.com/5J4CvCx.png)
+
 *Figure: Pipeline of our neural network.*
 </center>
 
@@ -79,6 +83,7 @@ VGGFace2 is also utilized in related applications, such as face recognition [6] 
 <center>
 
 ![](https://i.imgur.com/FsBB2mZ.png)
+
 *Figure: Example of FaceNet Face Recognition.*
 </center>
 
