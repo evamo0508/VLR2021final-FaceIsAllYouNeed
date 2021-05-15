@@ -38,6 +38,7 @@ In order to find the height labels for the people in the image dataset, we could
 <center>
 
 ![Alt Text](https://media.giphy.com/media/iQLOjvhkahU9lZgHZD/giphy.gif)
+
 *Figure: Facial Images in the CelebA Dataset Aligned Roughly About the Eyes*
 
 </center>
@@ -47,7 +48,6 @@ The next step was to find the height labels of these faces. The website celebhei
 The "Show me your face and I will tell you your height, weight, and body mass index" [2] research also had a celebrity face and labeled height dataset of size 1026, and we were able to contact the author to acquire it. Although the dataset isn't large compared to what we already have, we still added these image - height pairs to our data.
 
 <center>
-
 ![parse method](../images/parse.png)
 *Figure: Our data collection and matching method.*
 
@@ -78,7 +78,7 @@ VGGFace2 is also utilized in related applications, such as face recognition [6] 
 
 <center>
 
-![](https://i.imgur.com/FsBB2mZ.png)
+![Imgur Image](https://i.imgur.com/FsBB2mZ.PNG)
 *Figure: Example of FaceNet Face Recognition.*
 </center>
 
