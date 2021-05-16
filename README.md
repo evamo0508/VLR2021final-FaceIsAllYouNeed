@@ -3,12 +3,6 @@ Szu-Yu (Eva) Mo, Szu-Yu (Angela) Lin, Michael Cheng
 {szuyum, szuyul, mcheng3}@andrew.cmu.edu
 ## Abstract
 In this project, we have constructed and trained several deep regression models to predict one's height based solely on their facial image. We have also concluded that using the backbone of FaceNet as the image feature extractor followed by three layers of fully connected layers generates the best results. This application could be useful for criminal/suspicious individual identification or even prevent dating app frauds. Possible future works include predicting one's weight, age, or even net-worth based on facial images.
-## Presentation Video
-<center>
-
-[![Presentation given in class](https://img.youtube.com/vi/98Y_cJ7UhnE/0.jpg)](https://www.youtube.com/watch?v=98Y_cJ7UhnE)
-</center>
-
 ## Problem Description
 Our motivation includes the following scenarios where a tool to predict one's height based on their facial image would be really helpful.
 * **Surveillance**: Occasionally, a surveillance camera would only capture a criminal's or a suspect's face, but not the whole body image, e.g. a robber of a convenience store. Knowing the height of a criminal is critical for police investigation. A tool able to infer the height of the person from the surveillance footage might be able to help reduce crime rates.
@@ -138,6 +132,12 @@ To fulfill our motivation, we look forward to predicting one's weight, age, and 
 For our future work, we hope to train on the "in-the-wild" portion of the CelebA dataset (which are not cropped nor specifically aligned), aiming for better generalization, and also consider the possible clues encoded in other visible body parts.
 An observation we had on the dataset is that the majority of the subjects are Caucasian, therefore, our model tends to be more accurate when predicting the height of Caucasian identities, and are at times slightly inaccurate when predicting heights of other races. [9] states that models trained on biased datasets tend to encode and amplify those biases, and eventually affecting the outcome. 
 Therefore, another future goal of ours, is probably to train the model on a dataset more balanced across race, gender, and other attributes, such as use some methods that [9] proposed. 
+
+## Presentation Video
+<center>
+
+[![Presentation given in class](https://img.youtube.com/vi/98Y_cJ7UhnE/0.jpg)](https://www.youtube.com/watch?v=98Y_cJ7UhnE)
+</center>
 
 ## References
 [1] S. Gunel, H. Rhodin, P. Fua, “What Face and Body Shapes Can Tell About Height”, Conference on Computer Vision and Pattern Recognition (CVPR), 2019.
